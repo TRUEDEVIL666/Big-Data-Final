@@ -60,42 +60,30 @@ T \kern -.1667em \lower .7ex \hbox{E} \kern -.125emX}}
     \maketitle
 
     \begin{abstract}
-        In the age of big data, the ability to mine and extract valuable information from massive datasets can give the user an unparalleled edge against the competition.
-        Therefore, this requirement made by the lecturer is designed to simulate one of the three most fundamental challenges in data mining.
-        Through these series of tasks, we will explore some algorithm implementations and solve different problems as well as explore their trade-offs.
-        Each task is a different algorithm to explore and implement with their corresponding datasets.
-        Through these tasks, we will gain some practical insight and experience in working with these algorithms as well as a better understanding of their pros and cons to be able to cater to each dataset based on their characteristics.
+        This project implements and evaluates key techniques in mining massive datasets.
+        It covers hierarchical agglomerative clustering of string shingles using Jaccard distance; PySpark-based linear regression for gold price prediction;
+        CUR decomposition for feature dimensionality reduction on gold price data; and PageRank analysis of the \texttt{it.tdtu.edu.vn} web graph using PySpark.
+        The work demonstrates practical applications and provides insights into processing large-scale data.
     \end{abstract}
+
 
     \section{Introduction}
     \label{sec:introduction}
+    The increasing volume of data requires efficient mining techniques.
+    This project implements and analyzes four core algorithms: (1) hierarchical agglomerative clustering for non-Euclidean text data, using 4-shingles and Jaccard distance on alphabetical strings; (2) PySpark-based linear regression to predict Vietnamese gold prices from historical data; (3) CUR decomposition to reduce the dimensionality of gold price features (from 10 to 5) and assess its impact on regression; and (4) PageRank, implemented in PySpark, to identify influential pages within the \texttt{it.tdtu.edu.vn} web graph.
+    Python and PySpark are utilized throughout.
+    This report details the methodologies, implementations, and experimental results for each task.
 
-    This report is divided into three large sections corresponding to the first three tasks provided by the lecturer.
-    We will explore and present our findings while putting the proposed algorithms into practice.
 
-    Task 1 proposes utilizing the A-Priori algorithm in a Hadoop MapReduce program to discover groups of customers shopping on the same date as well as interacting with Hadoop Distributes File System (HDFS) to store files.
-    By applying these methods, we will be able to understand how to extract patterns from large datasets locally.
-
-    The second task focuses on implementing the Park-Chen-Yu (PCY) algorithm using Object-Oriented Programming (OOP) principles and PySpark DataFrame to identify frequent item pairs and generate association rules from customer purchase data stored in Google Drive.
-    The implementation, while generating association rules, also has to follow object-oriented programming principles inspired by PySpark's Frequent-Pattern Growth (FPGrowth) class.
-
-    In the third task, we will implement and compare the MinHashLSH algorithm and an alternative of our choice - in this case, a manual method of calculating Jaccard distance.
-    Both of these approaches should achieve the same goal of searching for similar pairs of dates where the Jaccard distance is above a predetermined threshold.
-    After that, we will visualize their runtime with their threshold ranging from 0 to 1 with 0.1 increments to gauge their performance and outline some characteristics between both approaches.
-    Through these implementations, we demonstrate practical applications of data mining techniques with a given dataset.
-    With these findings, we highlight the trade-offs between various aspects across different algorithms within the given time and constraints.
-
-    \section{First Task: A-Priori Algorithm for Frequent Customers}
+    \section{First Task: Hierarchical clustering in non-Euclidean spaces}
     \label{sec:first-task}
-%    \input{sections/first-task}
+    \input{sections/first-task}
 
-    \section{Second Task: PCY Algorithm for Frequent Items}
+
+    \section{Second Task: Linear Regression – Gold price prediction}
     \label{sec:second-task}
-%    \input{sections/second-task}
+    \input{sections/second-task}
 
-    \section{Third Task: MinHashLSH for Similar Dates}
-    \label{sec:third-task}
-%    \input{sections/third-task}
 
     \section{Contribution}
     \label{sec:contribution}
@@ -110,17 +98,18 @@ T \kern -.1667em \lower .7ex \hbox{E} \kern -.125emX}}
         \resizebox{240}{!}{ % Fit within column width
             \begin{tabular}{|l|c|c|c|}
                 \hline
-                \textbf{ID} & \textbf{Member} & \textbf{Contribution} & \textbf{Progress}\\
+                \textbf{ID} & \textbf{Member}       & \textbf{Contribution}       & \textbf{Progress} \\
                 \hline
-                522H0036 & Luong Canh Phong & Task 1 and Handling Report & 100\%\\
-                522H0092 & Cao Nguyen Thai Thuan & Overseer and Report Support & 100\%\\
-                522H0075 & Tang Minh Thien An & Task 3 & 100\%\\
-                522H0167 & Truong Tri Phong & Task 2 & 100\%\\
+                522H0036    & Luong Canh Phong      & Task 1 and Handling Report  & 100\%             \\
+                522H0092    & Cao Nguyen Thai Thuan & Overseer and Report Support & 100\%             \\
+                522H0075    & Tang Minh Thien An    & Task 3                      & 100\%             \\
+                522H0167    & Truong Tri Phong      & Task 2                      & 100\%             \\
                 \hline
             \end{tabular}
         }
         \label{tab:contributions}
     \end{table}
+
 
     \section{Self-evaluation}
     \label{sec:self-evaluation}
@@ -135,17 +124,18 @@ T \kern -.1667em \lower .7ex \hbox{E} \kern -.125emX}}
         \resizebox{240}{!}{ % Fit within column width
             \begin{tabular}{|l|c|c|c|}
                 \hline
-                \textbf{Task} & \textbf{Task Requirements} & \textbf{Completion Ratio}\\
+                \textbf{Task} & \textbf{Task Requirements}                & \textbf{Completion Ratio} \\
                 \hline
-                Task 1 & A-Priori Algorithm for Frequent Customers & 100\%\\
-                Task 2 & PCY Algorithm for Frequent Items & 95\%\\
-                Task 3 & MinHashLSH for Similar Dates & 90\%\\
-                Task 4 & Report & 100\%\\
+                Task 1        & A-Priori Algorithm for Frequent Customers & 100\%                     \\
+                Task 2        & PCY Algorithm for Frequent Items          & 95\%                      \\
+                Task 3        & MinHashLSH for Similar Dates              & 90\%                      \\
+                Task 4        & Report                                    & 100\%                     \\
                 \hline
             \end{tabular}
         }
         \label{tab:self-evaluation}
     \end{table}
+
 
     \section{Conclusion}
     \label{sec:conclusion}
