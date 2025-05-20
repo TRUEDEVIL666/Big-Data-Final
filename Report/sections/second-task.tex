@@ -17,7 +17,9 @@ With multiple features $x_1, x_2, \ldots, x_p$, it extends to:
     y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \ldots + \beta_p x_p + \epsilon
     \label{eq:multiple_lr}
 \end{equation}
-where $\beta_0$ is the intercept, $\beta_j$ are the feature coefficients (weights), and $\epsilon$ is the error term. The coefficients are typically learned by minimizing a loss function, such as Mean SquaredError (MSE), often using optimization algorithms like L-BFGS. Key assumptions include linearity, independence of errors, and homoscedasticity. This project applies linear regression to predict gold prices based on historical price features.
+where $\beta_0$ is the intercept, $\beta_j$ are the feature coefficients (weights), and $\epsilon$ is the error term.
+The coefficients are typically learned by minimizing a loss function, such as Mean SquaredError (MSE), often using optimization algorithms like L-BFGS. Key assumptions include linearity, independence of errors, and homoscedasticity.
+This project applies linear regression to predict gold prices based on historical price features.
 
 \subsection{Data Preparation}
 \label{subsec:data-preparation}
@@ -33,7 +35,7 @@ where $\beta_0$ is the intercept, $\beta_j$ are the feature coefficients (weight
 \label{subsec:model-implementation-and-training}
 
 Two separate linear regression models (\texttt{pyspark.ml.regression.LinearRegression}) were developed: one for `Buy Price' and one for `Sell Price', using their respective 10-day historical price vectors as features and the current price as the label.
-Models were configured with the \texttt{'l-bfgs'} solver and trained on the 70\% training subset.
+Models were configured with the \texttt{`l-bfgs'} solver and trained on the 70\% training subset.
 
 \subsection{Experimental Results and Evaluation}
 \label{subsec:experimental-results-and-evaluation}
@@ -46,17 +48,19 @@ The R² values (consistently $>$ 0.999), low RMSE/MAE, and high Explained Varian
     \centering
     \caption{LR Performance Metrics for Gold Price Prediction.}
     \renewcommand{\arraystretch}{1} % Adjust row spacing
-    \begin{tabular}{|c|c|c|c|c|c|c|}
-        \hline
-        \textbf{Model}        & \textbf{Data Set} & \textbf{RMSE} & \textbf{MSE} & \textbf{R²} & \textbf{MAE} & \textbf{Expl. Var.} \\
-        \hline
-        \multirow{Buy Price}  & Training          & 0.3232        & 0.1045       & 0.9995      & 0.1450       & 225.7249            \\
-        \cline{2-7}           & Test              & 0.2975        & 0.0885       & 0.9996      & 0.1356       & 226.5322            \\
-        \hline
-        \multirow{Sell Price} & Training          & 0.3062        & 0.0938       & 0.9996      & 0.1406       & 240.1171            \\
-        \cline{2-7}           & Test              & 0.2913        & 0.0848       & 0.9996      & 0.1319       & 240.6501            \\
-        \hline
-    \end{tabular}
+    \resizebox{\linewidth}{!}{
+        \begin{tabular}{|c|c|c|c|c|c|c|}
+            \hline
+            \textbf{Model}        & \textbf{Data Set} & \textbf{RMSE} & \textbf{MSE} & \textbf{R²} & \textbf{MAE} & \textbf{Expl. Var.} \\
+            \hline
+            \multirow{Buy Price}  & Training          & 0.3232        & 0.1045       & 0.9995      & 0.1450       & 225.7249            \\
+            \cline{2-7}           & Test              & 0.2975        & 0.0885       & 0.9996      & 0.1356       & 226.5322            \\
+            \hline
+            \multirow{Sell Price} & Training          & 0.3062        & 0.0938       & 0.9996      & 0.1406       & 240.1171            \\
+            \cline{2-7}           & Test              & 0.2913        & 0.0848       & 0.9996      & 0.1319       & 240.6501            \\
+            \hline
+        \end{tabular}
+    }
     \label{tab:task2_metrics}
 \end{table}
 
@@ -65,29 +69,29 @@ The R² values (consistently $>$ 0.999), low RMSE/MAE, and high Explained Varian
 
 \subsubsection{Loss History During Training}\text{}
 
-Line chart (Fig.~\ref{fig:buy_price_model_loss}) illustrated the objective function value per iteration, showing rapid convergence for `Buy Price' model.
+%Line chart (Fig.~\ref{fig:buy_price_model_loss}) illustrated the objective function value per iteration, showing rapid convergence for both `Buy Price' and `Sell Price' model.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{images/buy_price_model_loss}
+    \includegraphics[width=\linewidth]{images/loss_history}
     \caption{Loss History of Buy Price Prediction Model}
     \label{fig:buy_price_model_loss}
 \end{figure}
 
 \subsubsection{Performance Comparison}\text{}
 
-Bar charts (Fig.~\ref{fig:buy_rmse_mse_r2_mae} nd Fig.~\ref{fig:buy_var}) contrasted evaluation metrics (RMSE, MSE, R$^2$, MAE, Explained Variance) between training and testing sets, visually confirming robust generalization.
+%Bar charts (Fig.~\ref{fig:rmse_r2_mae} nd Fig.~\ref{fig:train_test_var}) contrasted evaluation metrics (RMSE, R$^2$, MAE, Explained Variance) between training and testing sets, visually confirming robust generalization.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{images/buy_rmse_mse_r2_mae}
-    \caption{'Buy Price' Model Performance (Training vs. Test Set).}
-    \label{fig:buy_rmse_mse_r2_mae}
+    \includegraphics[width=\linewidth]{images/rmse_r2_mae}
+    \caption{'Buy Price' and 'Sell Price' Models Performance.}
+    \label{fig:rmse_r2_mae}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{images/buy_var}
-    \caption{'Buy Price' Model Explained Variance Performance (Training vs. Test Set).}
-    \label{fig:buy_var}
+    \includegraphics[width=0.8\linewidth]{images/train_test_var}
+    \caption{'Buy Price' and 'Sell Price' Models Explained Variance Performance.}
+    \label{fig:train_test_var}
 \end{figure}
