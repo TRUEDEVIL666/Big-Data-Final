@@ -2,10 +2,10 @@ This task focused on predicting Vietnamese gold prices using a linear regression
 The objective was to transform historical time-series data into a suitable format for regression,
 train a model, and evaluate its predictive performance.
 
-\subsection{Overview of Linear Regression}
+\subsection{Overview of Linear Regression (LR)}
 \label{subsec:overview-of-linear-regression}
 
-Linear Regression is a supervised learning algorithm that models the linear relationship between a continuous target variable ($y$) and one or more independent predictor variables (features $\mathbf{x}$). The goal is to find an optimal linear function that best predicts $y$ given $\mathbf{x}$.
+LR is a supervised learning algorithm that models the linear relationship between a continuous target variable ($y$) and one or more independent predictor variables (features $\mathbf{x}$). The goal is to find an optimal linear function that best predicts $y$ given $\mathbf{x}$.
 
 For a single feature $x$, the model is:
 \begin{equation}
@@ -19,7 +19,7 @@ With multiple features $x_1, x_2, \ldots, x_p$, it extends to:
 \end{equation}
 where $\beta_0$ is the intercept, $\beta_j$ are the feature coefficients (weights), and $\epsilon$ is the error term.
 The coefficients are typically learned by minimizing a loss function, such as Mean SquaredError (MSE), often using optimization algorithms like L-BFGS. Key assumptions include linearity, independence of errors, and homoscedasticity.
-This project applies linear regression to predict gold prices based on historical price features.
+This project applies LR to predict gold prices based on historical price features.
 
 \subsection{Data Preparation}
 \label{subsec:data-preparation}
@@ -34,15 +34,13 @@ This project applies linear regression to predict gold prices based on historica
 \subsection{Model Implementation and Training}
 \label{subsec:model-implementation-and-training}
 
-Two separate linear regression models (\texttt{pyspark.ml.regression.LinearRegression}) were developed: one for `Buy Price' and one for `Sell Price', using their respective 10-day historical price vectors as features and the current price as the label.
+Two separate Linear Regression models (\texttt{pyspark.ml.regression.LinearRegression}) were developed: one for `Buy Price' and one for `Sell Price', using their respective 10-day historical price vectors as features and the current price as the label.
 Models were configured with the \texttt{`l-bfgs'} solver and trained on the 70\% training subset.
 
 \subsection{Experimental Results and Evaluation}
 \label{subsec:experimental-results-and-evaluation}
 
-The performance of the trained models was evaluated on both training and testing sets.
-Key metrics are summarized in Table~\ref{tab:task2_metrics}.
-The R² values (consistently $>$ 0.999), low RMSE/MAE, and high Explained Variance scores indicate strong predictive accuracy and good generalization to unseen data, with no significant overfitting observed.
+\subsubsection{Overall Results}\text{}
 
 \begin{table}[h]
     \centering
@@ -64,8 +62,11 @@ The R² values (consistently $>$ 0.999), low RMSE/MAE, and high Explained Varian
     \label{tab:task2_metrics}
 \end{table}
 
-\subsection{Visualizations}
-\label{subsec:visualizations}
+The performance of the trained models was evaluated on both training and testing sets.
+Key metrics are summarized in Table~\ref{tab:task2_metrics}.
+The R$^2$ values (consistently $>$ 0.999), low RMSE/MAE, and high Explained Variance scores indicate strong predictive accuracy and good generalization to unseen data, with no significant overfitting observed.
+
+\smallskip
 
 \subsubsection{Loss History During Training}\text{}
 
