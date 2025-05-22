@@ -42,28 +42,7 @@ Models were configured with the \texttt{`l-bfgs'} solver and trained on the 70\%
 
 \subsubsection{Overall Results}\text{}
 
-\begin{table}[h]
-    \centering
-    \caption{LR Performance Metrics for Gold Price Prediction.}
-    \renewcommand{\arraystretch}{1} % Adjust row spacing
-    \resizebox{\linewidth}{!}{
-        \begin{tabular}{|c|c|c|c|c|c|c|}
-            \hline
-            \textbf{Model}        & \textbf{Data Set} & \textbf{RMSE} & \textbf{MSE} & \textbf{R²} & \textbf{MAE} & \textbf{Expl. Var.} \\
-            \hline
-            \multirow{Buy Price}  & Training          & 0.3232        & 0.1045       & 0.9995      & 0.1450       & 225.7249            \\
-            \cline{2-7}           & Test              & 0.2975        & 0.0885       & 0.9996      & 0.1356       & 226.5322            \\
-            \hline
-            \multirow{Sell Price} & Training          & 0.3062        & 0.0938       & 0.9996      & 0.1406       & 240.1171            \\
-            \cline{2-7}           & Test              & 0.2913        & 0.0848       & 0.9996      & 0.1319       & 240.6501            \\
-            \hline
-        \end{tabular}
-    }
-    \label{tab:task2_metrics}
-\end{table}
-
 The performance of the trained models was evaluated on both training and testing sets.
-Key metrics are summarized in Table~\ref{tab:task2_metrics}.
 The R$^2$ values (consistently $>$ 0.999), low RMSE/MAE, and high Explained Variance scores indicate strong predictive accuracy and good generalization to unseen data, with no significant overfitting observed.
 
 \smallskip
@@ -74,7 +53,7 @@ The R$^2$ values (consistently $>$ 0.999), low RMSE/MAE, and high Explained Vari
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{images/loss_history}
+    \includegraphics[width=0.8\linewidth]{images/loss_history}
     \caption{Loss History of Buy Price Prediction Model}
     \label{fig:buy_price_model_loss}
 \end{figure}
@@ -85,7 +64,7 @@ The R$^2$ values (consistently $>$ 0.999), low RMSE/MAE, and high Explained Vari
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{images/rmse_r2_mae}
+    \includegraphics[width=0.8\linewidth]{images/rmse_r2_mae}
     \caption{'Buy Price' and 'Sell Price' Models Performance.}
     \label{fig:rmse_r2_mae}
 \end{figure}

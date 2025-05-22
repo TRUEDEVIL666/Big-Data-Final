@@ -10,81 +10,53 @@ The algorithm gradually merges the closest pairs of clusters until the desired n
 \subsection{Implementation of the Algorithm}
 \label{subsec:implementation-of-the-algorithm}
 
-The implemented AHC algorithm operates on a dataset of shingle sets (derived from alphabetical strings) to partition them into a specified number of distinct groups.
-This bottom-up approach initiates by treating each shingle set as an individual cluster.
-The core of the algorithm lies in its iterative merging strategy: in each step, it identifies the two ``closest'' active
-clusters and combines them into a single, new cluster.
-This process is guided by two key definitions: firstly, each cluster is represented by a clustroid, which is the member sample that minimizes the sum of squared Jaccard distances
-to all other members within that cluster.
-Secondly, the dissimilarity (or ``distance'') between any two clusters is determined by the Jaccard distance calculated directly between their respective clustroids.
-A min-priority queue (heap) is employed to efficiently manage and retrieve the closest pair of clusters at each iteration.
-The merging continues until the number of active clusters reduces to the desired target, yielding a final set of clusters based on the principle of grouping entities with the most similar representative points.
-Performance is enhanced by caching Jaccard distances between individual samples.
+The AHC algorithm partitions a dataset of shingle sets (derived from character sequences) into a predefined number of clusters using a bottom-up approach.
+Initially, each data point is treated as its own cluster.
+The algorithm then iteratively merges the closest pair of clusters until the desired number of clusters is reached or an early stopping condition is met.
 
-\subsubsection{\texttt{fit(self, input\_shingle\_sets, num\_target\_clusters=None)}}\text{}
+Each cluster is represented by a clustroid—the most central element that minimizes the sum of squared Jaccard distances to all other elements in the cluster.
+The dissimilarity between clusters would be measured by the Jaccard distance between their clustroids.
 
-Purpose: This is the main orchestrating method for the entire clustering process.
+To improve efficiency, the algorithm uses a priority queue (heap) to quickly find the closest pair of clusters and a cache to store pairwise Jaccard distances and avoid redundant calculations.
 
-Inputs: A list of \texttt{input\_shingle\_sets} (data samples) and an optional \texttt{num\_target\_clusters} (the desired number of final clusters).
+In addition to the main stopping condition (desired number of clusters), an early stopping criterion is applied: if merging two clusters results in a new cluster whose diameter (maximum Jaccard distance between any two elements) exceeds a specified \texttt{threshold\_ratio} times the larger diameter of the original clusters, the merging process halts to avoid forming poorly matched clusters.
 
-Outputs: A list of lists, where each inner
-list contains the original indices of samples belonging to a final cluster.
+Description of Key Components
 
-Operation: It initializes each sample as a distinct cluster.
-It then iteratively identifies the pair of currently active clusters that are ``closest'' (based on inter-clustroid Jaccard distance), merges them into a new cluster.
-Then proceeds to recalculate the new cluster's representative clustroid, and updates the set of active clusters and their pairwise distances (managed via a min-priority heap).
-This merging process continues until the number of active clusters equals num\_target\_clusters.
+\subsubsection{\texttt{fit}}\text{}
 
-\subsubsection{\texttt{\_calculate\_clustroid\_strictly(self, cluster\_original\_sample\_indices)}}\text{}
+Coordinates the full clustering process.
+Begins with each sample as an individual cluster, then repeatedly finds and merges the nearest pair, updates clustroids and heap.
+Stops when either the target number of clusters is reached or the diameter condition is violated.
 
-Purpose: To identify the most representative sample (clustroid) within a given cluster.
+\subsubsection{\texttt{\_calculate\_clustroid\_strictly}}\text{}
 
-Input: \texttt{cluster\_original\_sample\_indices} (a list/tuple of original sample indices that form the cluster).
+Identifies the clustroid by selecting the element with the smallest sum of squared Jaccard distances to all others in the cluster.
 
-Output: The original sample index of the calculated clustroid.
+\subsubsection{\texttt{\_get\_inter\_cluster\_distance\_centroid}}\text{}
 
-Operation: This method determines the clustroid by finding the sample within the input cluster that has the minimum sum of squared Jaccard distances to all other samples in that same cluster.
-It exhaustively checks each member as a potential clustroid.
+Computes the distance between two clusters by calculating the Jaccard distance between their clustroids.
 
-\subsubsection{\texttt{\_get\_inter\_cluster\_distance\_centroid(\-self, internal\_cluster\_id1, internal\_cluster\_id2)}}\text{}
+\subsubsection{\texttt{\_get\_cached\_sample\_distance}}\text{}
 
-Purpose: To compute the dissimilarity (distance) between two active clusters.
+Retrieves or computes the Jaccard distance between two samples, using a cache to prevent duplicate computations.
 
-Input: The \texttt{internal\_cluster\_ids} of two active clusters.
+\subsubsection{\_calculate\_cluster\_diameter}\text{}
 
-Output: The Jaccard distance value between the clustroids of these two clusters.
+Calculates the diameter of a cluster as the maximum Jaccard distance between any two elements within it.
+This is used for early stopping checks.
 
-Operation: It retrieves the pre-calculated clustroids for the two input clusters (using their internal IDs) and then computes the Jaccard distance directly between these two representative clustroid samples.
-This value dictates which clusters are considered for merging.
+\subsubsection{\texttt{get\_final\_cluster\_details}}\text{}
 
-\subsubsection{\texttt{\_get\_cached\_sample\_distance(self, original\_sample\_idx1, original\_sample\_idx2)}}\text{}
-
-Purpose: To efficiently retrieve or compute the Jaccard distance between two original data samples, utilizing a cache.
-
-Input: The original indices (\texttt{original\_sample\_idx1}, \texttt{original\_sample\_idx2}) of two data samples.
-
-Output: The Jaccard distance between the two specified samples.
-
-Operation: It first checks if the distance for this pair of samples has already been computed and stored in \texttt{self.\_sample\_distance\_cache}.
-If so, it returns the cached value.
-Otherwise, it computes the Jaccard distance using the provided \texttt{self.distance\_metric} (e.g., \texttt{jaccard\_distance} function), stores it in the cache for future use, and then returns it.
-
-\subsubsection{\texttt{get\_final\_cluster\_details(self)}}\text{}
-
-Purpose: To retrieve detailed information about the final clusters after the fit method has completed.
-
-Input: None (it operates on the state of the object after fit).
-
-Output: A list of dictionaries, where each dictionary contains details for one final cluster, including its internal ID, member original indices, the shingle sets of its members, its clustroid's original sample index, and the clustroid's shingle set.
-
-Operation: It iterates through the set of \texttt{self.active\_cluster\_ids} (which represent the final clusters), and for each, it compiles the relevant information from \texttt{self.cluster\_members\_map} and \texttt{self.clustroids\_map}.
+After clustering completes, this method retrieves comprehensive details about the final clusters, including the internal cluster ID, the list of sample indices within each cluster, the associated shingle sets, and the index and content of the clustroid.
+This final step prepares the output for later analysis or visualization.
 
 \subsection{Experimental Results and Evaluation}
 \label{subsec:experimental-results-and-evaluation-ahc}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{images/clustroid_distance}
+    \includegraphics[width=0.8\linewidth]{images/clustroid_distance}
     \caption{Average Jaccard Distance to Clustroid}
     \label{fig:clustroid_distance}
 \end{figure}
