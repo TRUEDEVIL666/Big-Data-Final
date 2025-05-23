@@ -21,12 +21,12 @@ This iterative process converges when the difference between successive rank est
 The implementation consists of three main components: a web crawler to collect URL pairs, a PySpark-based framework for data processing, and a PageRank algorithm to compute page importance.
 The system is designed to handle large-scale data efficiently, leveraging parallel processing and distributed computing.
 
-\subsubsection{Crawler Function - Adjacency Matrix Initialization}\text{}
+\subsubsection{Crawler Function—Adjacency Matrix Initialization}\text{}
 
 The web crawler is implemented in Python using the \texttt{requests} and \texttt{BeautifulSoup} libraries to fetch and parse web pages.
 The \texttt{crawl\_website} function starts from a seed URL (\texttt{https://it.tdtu.edu.vn}) and collects unique (source, destination) URL pairs, representing directed edges in the web graph.
-It ensures that only URLs within the target domain are included and excludes static files (e.g., .jpg, .pdf) using the \texttt{is\_valid\_url} function.
-The crawler uses a set to store unique edges, avoiding duplicates, and saves the results to a CSV file (\texttt{url\_pairs.csv}). The crawler initializes the adjacency matrix implicitly by collecting edges, which are later processed to form the graph structure for PageRank computation.
+It ensures that only URLs within the target domain are included and excludes static files (e.g., .jpg, .pdf) using the \texttt{is\_valid\_url} function, the function also ignores pages with the (\texttt{http}) transfer protocols so as not to crawl the same page twice.
+The crawler uses a set to store unique edges to avoid duplicates and saves the results to a CSV file (\texttt{url\_pairs.csv}). The crawler initializes the adjacency matrix implicitly by collecting edges, which are later processed to form the graph structure for PageRank computation.
 
 \subsubsection{PySpark Initialization}\text{}
 
@@ -39,7 +39,7 @@ The edges are loaded and processed to create a list of unique pages (nodes) and 
 \subsubsection{PageRank Implementation}\text{}
 
 The PageRank algorithm is implemented in a \texttt{PageRank} class that takes the edge DataFrame, damping factor (0.85), maximum iterations (10), and tolerance (1e-4) as parameters.
-The algorithm initializes ranks uniformly ($\frac{1}{N}$) for all pages and iteratively updates them based on contributions from incoming links.
+The algorithm initializes ranks uniformly ($1/N$) for all pages and iteratively updates them based on contributions from incoming links.
 It uses Spark's DataFrame operations for joins, aggregations, and broadcasting to optimize performance.
 Checkpoints are used every three iterations to manage memory.
 The algorithm outputs a DataFrame with page URLs and their corresponding PageRank scores, which are used for further analysis and visualization.
@@ -47,8 +47,8 @@ The algorithm outputs a DataFrame with page URLs and their corresponding PageRan
 \subsection{Result Analysis}
 \label{subsec:result-analysis}
 
-The crawler collected 75,970 unique URL pairs from the \texttt{it.tdtu.edu.vn} domain, forming a directed graph of web pages.
-The PageRank algorithm was applied to this graph, and the top 20 pages by rank were visualized using a directed graph, with node sizes proportional to their ranks.
+The crawler collected 42,062 unique URL pairs from the \texttt{it.tdtu.edu.vn} domain, forming a directed graph of web pages.
+The PageRank algorithm was applied to this graph, and the top 10 pages by rank were visualized using a directed graph, with node sizes proportional to their ranks.
 The visualization was generated using the \texttt{networkx} and \texttt{matplotlib} libraries and saved as \texttt{top\_pages\_graph.png}.
 
 \begin{figure}[H]
@@ -58,6 +58,6 @@ The visualization was generated using the \texttt{networkx} and \texttt{matplotl
     \label{fig:top_pages_graph}
 \end{figure}
 
-The most important page, with a PageRank score of approximately 0.01293, was \texttt{https://it.tdtu.edu.vn/}, the faculty homepage.
+The most important page, with a PageRank score of approximately 0.024, was \texttt{https://it.tdtu.edu.vn/}, the faculty homepage.
 This high rank is expected, as the homepage is a central hub with many incoming links from other pages within the domain.
-Other high-ranking pages included department-specific pages and key sections like \texttt{https://it.tdtu.edu.vn/en}, reflecting the students' most focused topics and subjects.
+Other high-ranking pages included department-specific pages and key sections like \texttt{https://it.tdtu.edu.vn/en}, reflecting the students' most interesting topics and subjects.
